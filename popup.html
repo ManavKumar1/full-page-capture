@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Full Page Capture</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  body { width: 360px; }
+
+  .popup {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pop-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 18px 14px;
+    border-bottom: 1px solid var(--line-on-paper);
+  }
+  .pop-header .meta { min-width: 0; flex: 1; }
+  .pop-header .title {
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .pop-header .url {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--paper-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  #settingsBtn { color: var(--paper-text-muted); }
+  #settingsBtn:hover { background: var(--paper-2); color: var(--paper-text); }
+  #settingsBtn svg { width: 18px; height: 18px; }
+
+  .capture-zone {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 22px 18px;
+  }
+  .capture-actions { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .capture-actions .headline { font-size: 15px; font-weight: 700; margin: 0 0 2px; }
+  .capture-actions .sub { font-size: 12px; color: var(--paper-text-muted); margin: 0 0 8px; line-height: 1.4; }
+
+  .status-row {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 0 18px 16px;
+    font-size: 11px;
+  }
+  .status-row.is-visible { display: flex; }
+  .status-row .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--safelight);
+    animation: gfp-pulse 1s ease-in-out infinite;
+  }
+  @keyframes gfp-pulse { 50% { opacity: 0.3; } }
+  .status-row .txt { color: var(--paper-text-muted); }
+  .status-row.is-error .txt { color: #b3452b; }
+  .status-row.is-error .dot { background: #b3452b; animation: none; }
+
+  .recent {
+    padding: 14px 18px 18px;
+    border-top: 1px solid var(--line-on-paper);
+  }
+  .recent-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .recent-head a { font-size: 11px; font-weight: 600; color: var(--safelight-dim); text-decoration: none; }
+  .recent-head a:hover { text-decoration: underline; }
+
+  .strip {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+  .strip .film-frame { width: 72px; flex-shrink: 0; cursor: pointer; border: none; padding: 7px 5px; }
+  .strip .frame-window { height: 52px; }
+  .strip .film-frame:hover { outline: 1px solid var(--safelight); outline-offset: 1px; }
+
+  .empty-strip {
+    font-size: 11.5px;
+    color: var(--paper-text-muted);
+    padding: 8px 0;
+  }
+</style>
+</head>
+<body>
+  <div class="popup">
+    <div class="pop-header">
+      <div class="viewfinder">
+        <span class="vf-tr"></span><span class="vf-br"></span>
+        <img id="tabFavicon" src="icons/icon48.png" alt="" />
+      </div>
+      <div class="meta">
+        <div class="title" id="tabTitle">Loading…</div>
+        <div class="url" id="tabUrl">&nbsp;</div>
+      </div>
+      <button class="icon-btn" id="settingsBtn" title="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+    </div>
+
+    <div class="capture-zone">
+      <button class="shutter-btn" id="captureFullBtn" title="Capture full page">
+        <span class="ring"></span>
+      </button>
+      <div class="capture-actions">
+        <p class="headline">Capture full page</p>
+        <p class="sub">Scrolls through the page and stitches every part into one image.</p>
+        <button class="btn btn-ghost" id="captureVisibleBtn" style="align-self: flex-start;">
+          Capture visible area only
+        </button>
+      </div>
+    </div>
+
+    <div class="status-row" id="statusRow">
+      <span class="dot"></span>
+      <span class="txt mono" id="statusTxt">Working…</span>
+    </div>
+
+    <div class="recent">
+      <div class="recent-head">
+        <span class="eyebrow on-paper">Recent captures</span>
+        <a href="#" id="viewAllLink">View all →</a>
+      </div>
+      <div class="strip thin-scroll" id="strip">
+        <p class="empty-strip">Nothing captured yet — your first shot will show up here.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

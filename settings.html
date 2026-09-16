@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Settings — Full Page Capture</title>
+<link rel="stylesheet" href="styles.css" />
+<link rel="icon" href="icons/icon32.png" />
+<style>
+  html, body { background: var(--paper); }
+  .toolbar {
+    background: var(--ink); color: var(--ink-text);
+    display: flex; align-items: center; gap: 12px;
+    padding: 0 18px; height: 56px;
+    border-bottom: 1px solid var(--line-on-ink);
+  }
+  .toolbar h1 { font-size: 14px; font-weight: 700; margin: 0; }
+
+  main { max-width: 560px; margin: 0 auto; padding: 32px 24px 60px; }
+
+  .panel {
+    background: #fff;
+    border: 1px solid var(--line-on-paper);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+  }
+  .field {
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--line-on-paper);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .field:last-child { border-bottom: none; }
+  .field .info { flex: 1; }
+  .field label { font-size: 13px; font-weight: 600; display: block; margin-bottom: 3px; }
+  .field .hint { font-size: 11.5px; color: var(--paper-text-muted); line-height: 1.4; }
+
+  select, input[type="number"] {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--line-on-paper);
+    background: var(--paper);
+    color: var(--paper-text);
+    width: 96px;
+  }
+
+  .toggle-row { display: flex; gap: 8px; }
+  .toggle-row button {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    padding: 7px 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--line-on-paper);
+    background: var(--paper);
+    color: var(--paper-text-muted);
+  }
+  .toggle-row button.is-active {
+    background: var(--ink);
+    color: #fff;
+    border-color: var(--ink);
+  }
+
+  .save-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 18px;
+  }
+  .saved-note {
+    font-size: 12px;
+    color: var(--paper-text-muted);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .saved-note.is-visible { opacity: 1; color: var(--safelight-dim); font-weight: 600; }
+
+  .eyebrow-block { margin-bottom: 14px; }
+</style>
+</head>
+<body>
+  <div class="toolbar"><h1>Settings</h1></div>
+  <main>
+    <div class="eyebrow-block">
+      <span class="eyebrow on-paper">Capture behavior</span>
+    </div>
+    <div class="panel">
+      <div class="field">
+        <div class="info">
+          <label>Delay between frames</label>
+          <div class="hint">Longer delays give slow-loading images and animations more time to settle before each shot.</div>
+        </div>
+        <input type="number" id="captureDelay" min="200" max="3000" step="50" />
+      </div>
+      <div class="field">
+        <div class="info">
+          <label>Image format</label>
+          <div class="hint">PNG is crisper for text-heavy pages. JPEG makes smaller files on photo-heavy pages.</div>
+        </div>
+        <div class="toggle-row" id="formatToggle">
+          <button data-value="png">PNG</button>
+          <button data-value="jpeg">JPEG</button>
+        </div>
+      </div>
+      <div class="field" id="qualityField">
+        <div class="info">
+          <label>JPEG quality</label>
+          <div class="hint">Higher keeps more detail at the cost of file size.</div>
+        </div>
+        <input type="number" id="jpegQuality" min="40" max="100" step="1" />
+      </div>
+      <div class="field">
+        <div class="info">
+          <label>Keep in history</label>
+          <div class="hint">Older captures beyond this number are removed automatically to save space.</div>
+        </div>
+        <input type="number" id="maxCaptures" min="5" max="200" step="5" />
+      </div>
+    </div>
+
+    <div class="save-row">
+      <button class="btn btn-primary" id="saveBtn">Save changes</button>
+      <span class="saved-note mono" id="savedNote">Saved</span>
+    </div>
+  </main>
+  <script src="settings.js"></script>
+</body>
+</html>

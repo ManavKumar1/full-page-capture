@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>All captures — Full Page Capture</title>
+<link rel="stylesheet" href="styles.css" />
+<link rel="icon" href="icons/icon32.png" />
+<style>
+  html, body { background: var(--paper); }
+
+  .toolbar {
+    background: var(--ink);
+    color: var(--ink-text);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 18px;
+    height: 56px;
+    border-bottom: 1px solid var(--line-on-ink);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .toolbar h1 { font-size: 14px; font-weight: 700; margin: 0; }
+  .toolbar .spacer { flex: 1; }
+  .toolbar .count { font-family: var(--font-mono); font-size: 11px; color: var(--ink-text-muted); }
+
+  .search {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--line-on-ink);
+    border-radius: 999px;
+    padding: 7px 14px;
+    color: var(--ink-text);
+    font-size: 12.5px;
+    width: 220px;
+  }
+  .search::placeholder { color: var(--ink-text-muted); }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 28px 24px 60px; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    background: transparent;
+    border: none;
+    text-align: left;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+  }
+  .card .film-frame { padding: 8px 6px; }
+  .card .frame-window { height: 130px; }
+  .card:hover .frame-window { outline: 2px solid var(--safelight); outline-offset: 2px; }
+
+  .card-info { padding: 8px 2px 0; position: relative; }
+  .card-info .ct { font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card-info .cd { font-size: 10.5px; color: var(--paper-text-muted); display: flex; gap: 6px; align-items: center; margin-top: 2px; }
+  .badge {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 1px 6px;
+    border-radius: 999px;
+    background: var(--paper-2);
+    color: var(--paper-text-muted);
+  }
+
+  .card-delete {
+    position: absolute;
+    top: -128px;
+    right: 4px;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(20,22,28,0.65);
+    color: #fff;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+  .card-delete svg { width: 14px; height: 14px; }
+  .card:hover .card-delete { display: flex; }
+  .card-delete:hover { background: var(--safelight); }
+
+  .empty {
+    text-align: center;
+    padding: 90px 20px;
+    color: var(--paper-text-muted);
+  }
+  .empty .viewfinder { margin: 0 auto 18px; width: 56px; height: 56px; }
+  .empty h2 { font-size: 16px; color: var(--paper-text); margin: 0 0 6px; }
+  .empty p { font-size: 13px; margin: 0; }
+</style>
+</head>
+<body>
+  <div class="toolbar">
+    <h1>All captures</h1>
+    <span class="count mono" id="count"></span>
+    <div class="spacer"></div>
+    <input class="search" id="search" placeholder="Filter by title or URL…" />
+  </div>
+  <main>
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="emptyState" style="display:none;">
+      <div class="viewfinder"><span class="vf-tr"></span><span class="vf-br"></span></div>
+      <h2>No captures yet</h2>
+      <p>Open the extension on any page and hit the shutter to take your first shot.</p>
+    </div>
+  </main>
+  <script src="history.js"></script>
+</body>
+</html>

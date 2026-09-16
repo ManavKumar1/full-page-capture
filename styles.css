@@ -1,0 +1,293 @@
+/* ============================================================
+   Full Page Capture — shared design system
+   Concept: a darkroom / contact-sheet. Ink-black chrome, warm
+   "safelight" accent, paper-toned canvas, mono "frame counter"
+   readouts. Signature motif: sprocket-perforated film frames
+   for thumbnails, and viewfinder corner brackets for capture.
+   ============================================================ */
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/inter-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/inter-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/inter-latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("fonts/inter-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/jetbrains-mono-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/jetbrains-mono-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/jetbrains-mono-latin-600-normal.woff2") format("woff2");
+}
+
+:root {
+  --ink: #14161c;
+  --ink-2: #1c1f28;
+  --ink-3: #262a35;
+  --paper: #f6f5f1;
+  --paper-2: #ece9e1;
+  --line-on-paper: #ddd9cf;
+  --line-on-ink: rgba(255, 255, 255, 0.09);
+  --safelight: #ff5a36;
+  --safelight-dim: #d6431f;
+  --signal: #3ddc97;
+  --ink-text: #e8e7e2;
+  --ink-text-muted: #9a9fac;
+  --paper-text: #1b1c20;
+  --paper-text-muted: #6b7080;
+  --font-display: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --shadow-card: 0 1px 2px rgba(20, 22, 28, 0.06), 0 8px 24px rgba(20, 22, 28, 0.08);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-display);
+  color: var(--paper-text);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+a { color: inherit; }
+
+::selection { background: var(--safelight); color: white; }
+
+:focus-visible {
+  outline: 2px solid var(--safelight);
+  outline-offset: 2px;
+}
+
+/* ---------- buttons ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.01em;
+  padding: 10px 16px;
+  transition: transform 0.12s ease, background 0.12s ease, opacity 0.12s ease;
+}
+.btn:active { transform: scale(0.97); }
+.btn:disabled { opacity: 0.5; cursor: default; pointer-events: none; }
+
+.btn-primary {
+  background: var(--safelight);
+  color: #fff;
+}
+.btn-primary:hover { background: var(--safelight-dim); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--paper-text);
+  border: 1px solid var(--line-on-paper);
+}
+.btn-ghost:hover { background: var(--paper-2); }
+
+.btn-ghost-on-ink {
+  background: transparent;
+  color: var(--ink-text);
+  border: 1px solid var(--line-on-ink);
+}
+.btn-ghost-on-ink:hover { background: rgba(255, 255, 255, 0.06); }
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: none;
+  color: var(--ink-text-muted);
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.icon-btn:hover { background: rgba(255, 255, 255, 0.08); color: var(--ink-text); }
+.icon-btn.is-active { background: var(--safelight); color: #fff; }
+.icon-btn svg { width: 18px; height: 18px; }
+
+/* ---------- shutter (primary capture) button ---------- */
+
+.shutter-btn {
+  position: relative;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  border: none;
+  background: var(--safelight);
+  box-shadow: 0 0 0 4px rgba(255, 90, 54, 0.15), 0 8px 20px rgba(255, 90, 54, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  flex-shrink: 0;
+}
+.shutter-btn::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.55);
+}
+.shutter-btn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 0 0 6px rgba(255, 90, 54, 0.18), 0 10px 26px rgba(255, 90, 54, 0.4);
+}
+.shutter-btn:active { transform: scale(0.96); }
+.shutter-btn:disabled {
+  background: #b8bcc4;
+  box-shadow: none;
+  pointer-events: none;
+}
+.shutter-btn .ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+}
+.shutter-btn.is-busy .ring {
+  border-top-color: rgba(255, 255, 255, 0.9);
+  animation: gfp-spin 0.9s linear infinite;
+}
+@keyframes gfp-spin { to { transform: rotate(360deg); } }
+
+/* ---------- viewfinder corner brackets ---------- */
+
+.viewfinder {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+.viewfinder::before,
+.viewfinder::after,
+.viewfinder .vf-tr,
+.viewfinder .vf-br {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: var(--safelight);
+  border-style: solid;
+}
+.viewfinder::before { top: 0; left: 0; border-width: 2px 0 0 2px; }
+.viewfinder::after { bottom: 0; left: 0; border-width: 0 0 2px 2px; }
+.viewfinder .vf-tr { top: 0; right: 0; border-width: 2px 2px 0 0; }
+.viewfinder .vf-br { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
+.viewfinder img {
+  position: absolute;
+  inset: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+/* ---------- film-frame thumbnail (signature motif) ---------- */
+
+.film-frame {
+  position: relative;
+  background: var(--ink);
+  border-radius: var(--radius-sm);
+  padding: 7px 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.film-frame .sprockets {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2px;
+}
+.film-frame .sprockets span {
+  width: 5px;
+  height: 5px;
+  border-radius: 1px;
+  background: #3a3f4c;
+}
+.film-frame .frame-window {
+  position: relative;
+  overflow: hidden;
+  border-radius: 3px;
+  background: var(--paper-2);
+}
+.film-frame .frame-window img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+
+/* ---------- mono readouts / labels ---------- */
+
+.mono {
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-text-muted);
+}
+.eyebrow.on-paper { color: var(--paper-text-muted); }
+
+/* ---------- scrollbars (kept minimal, on ink surfaces) ---------- */
+
+.thin-scroll::-webkit-scrollbar { height: 8px; width: 8px; }
+.thin-scroll::-webkit-scrollbar-thumb {
+  background: var(--ink-3);
+  border-radius: 4px;
+}
+.thin-scroll::-webkit-scrollbar-track { background: transparent; }
